@@ -1,0 +1,3 @@
+[submodule "astrolib"]
+	path = astrolib
+	url = git://github.com/derickr/astro.git
