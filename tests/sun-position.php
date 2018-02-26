@@ -24,7 +24,7 @@ foreach( $points as $info )
 		$d->modify( "+$j seconds" );
 		
 		$ts = $d->format( "U" );
-		printf( "%0.3f;", earth_sunpos( $ts, $lat, $lon ) );
+		printf( "%0.3f;", earth_sunpos( $ts, $lat, $lon )['azimuth'] );
 	}
 	echo "\n";
 }

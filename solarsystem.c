@@ -4,6 +4,7 @@
 
 #include "php.h"
 #include "php_solarsystem.h"
+#include "astrolib/astro.h"
 #include "ext/standard/info.h"
 
 #ifdef COMPILE_DL_SOLARSYSTEM
@@ -14,7 +15,7 @@ PHP_FUNCTION(earth_sunpos)
 {
 	long ts; /* unix timestamp */
 	double lat, lon;
-	double L, ra, decl, rad, sidtime, ha; /* temp vars */
+	double L, ra, decl, rad, sidtime, ha, M; /* temp vars */
 	double azimuth, altitude;
 	double daynr; /* In 2000 Jan 0.0 Epoch */
 
@@ -22,11 +23,13 @@ PHP_FUNCTION(earth_sunpos)
 		return;
 	}
 	daynr = (ts - 946598400) / 86400.0;
-	sunpos(daynr, &L, &ra, &decl, &rad);
+	sunpos(daynr, &L, &M, &ra, &decl, &rad);
 	sidtime_and_ha(L, (daynr - floor(daynr)) * 24, lon, ra, &sidtime, &ha);
 	sunaltazimuth(L, lat, ha, decl, &azimuth, &altitude);
 
-	RETURN_DOUBLE(altitude);
+	array_init(return_value);
+	add_assoc_double(return_value, "altitude", altitude);
+	add_assoc_double(return_value, "azimuth", azimuth);
 }
 
 zend_function_entry solarsystem_functions[] = {
